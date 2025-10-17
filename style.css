@@ -1393,6 +1393,21 @@ html {
     overscroll-behavior: contain;
 }
 
+/* Workout Mode Modals - Higher z-index to appear above workout screen */
+.workout-mode-screen .modal {
+    z-index: 2100 !important;
+}
+
+.workout-mode-screen .modal-backdrop {
+    z-index: 2050 !important;
+    position: fixed !important;
+}
+
+/* Ensure modal backdrops inside workout screen */
+body.modal-open .workout-mode-screen .modal-backdrop {
+    position: absolute;
+}
+
 .workout-mode-screen .modern-navbar {
     position: sticky;
     top: 0;

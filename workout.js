@@ -56,10 +56,38 @@ const caloriesEstimateEl = document.getElementById('caloriesEstimate');
 const queueCountEl = document.getElementById('queueCount');
 const workoutQueueList = document.getElementById('workoutQueueList');
 
+// Helper function to show workout modals properly
+function showWorkoutModal(modalId) {
+    const modalElement = document.getElementById(modalId);
+    if (!modalElement) {
+        console.error(`Modal ${modalId} not found`);
+        return null;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Listen for modal show event
+    modalElement.addEventListener('shown.bs.modal', function() {
+        // Move modal and backdrop inside workout screen
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        const modalDialog = document.querySelector(`#${modalId}`);
+        
+        if (modalBackdrop && workoutModeScreen.style.display === 'block') {
+            workoutModeScreen.appendChild(modalBackdrop);
+        }
+    }, { once: true });
+    
+    return modal;
+}
+
 // Show Microphone Permission Modal
 function showMicrophonePermissionModal() {
     return new Promise((resolve) => {
-        const modal = new bootstrap.Modal(document.getElementById('micPermissionModal'));
+        const modal = showWorkoutModal('micPermissionModal');
+        if (!modal) {
+            resolve(false);
+            return;
+        }
         
         const allowBtn = document.getElementById('allowMicBtn');
         const declineBtn = document.getElementById('declineMicBtn');
@@ -820,7 +848,8 @@ function updateStats() {
 
 // Show Workout Complete Modal
 function showWorkoutCompleteModal() {
-    const modal = new bootstrap.Modal(document.getElementById('workoutCompleteModal'));
+    const modal = showWorkoutModal('workoutCompleteModal');
+    if (!modal) return;
     
     const minutes = Math.floor(totalWorkoutTime / 60);
     const seconds = totalWorkoutTime % 60;
@@ -834,12 +863,9 @@ function showWorkoutCompleteModal() {
 // Show Voice Help
 function showVoiceHelp() {
     // Show the voice commands modal
-    const modalElement = document.getElementById('voiceCommandsModal');
-    if (modalElement) {
-        const voiceCommandsModal = new bootstrap.Modal(modalElement);
-        voiceCommandsModal.show();
-    } else {
-        console.error('Voice commands modal not found');
+    const modal = showWorkoutModal('voiceCommandsModal');
+    if (modal) {
+        modal.show();
     }
 }
 
