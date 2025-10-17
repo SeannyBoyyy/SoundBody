@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="SoundBody - Your comprehensive exercise database with detailed instructions and visual guides">
+    <meta name="theme-color" content="#0d6efd">
+    <meta name="keywords" content="exercise, fitness, workout, health, training">
+    <title>SoundBody - Exercise Database</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=2.3">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark modern-navbar" role="navigation" aria-label="Main navigation">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand brand-logo" href="#" aria-label="SoundBody Home">
+                <div class="brand-icon">
+                    <i class="bi bi-heart-pulse" aria-hidden="true"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">SoundBody</span>
+                    <span class="brand-tagline">Fitness Hub</span>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern active" href="#" aria-current="page">
+                            <i class="bi bi-house-fill" aria-hidden="true"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern" href="#search-section" aria-label="Jump to search section">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <span>Search</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern nav-link-with-badge" href="#" id="savedLink" aria-label="View saved exercises">
+                            <i class="bi bi-bookmark-fill" aria-hidden="true"></i>
+                            <span class="nav-link-text">Saved</span>
+                            <span class="saved-badge" id="savedCount" aria-hidden="true">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-modern nav-link-workout" href="#" id="workoutLink" aria-label="Start workout mode">
+                            <i class="bi bi-play-circle-fill" aria-hidden="true"></i>
+                            <span>Workout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="container-fluid bg-light py-4 py-md-5" role="banner">
+        <div class="container">
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                <i class="bi bi-dumbbell" aria-hidden="true"></i> Exercise Database
+            </h1>
+            <p class="lead text-muted mb-0">Discover and learn from a comprehensive collection of exercises with detailed instructions and visual guides</p>
+            <p class="text-muted mt-2">
+                <i class="bi bi-info-circle" aria-hidden="true"></i> 
+                <small>Browse exercises by category, muscle group, or difficulty level</small>
+            </p>
+        </div>
+    </header>
+
+    <!-- Search and Filter Section -->
+    <section class="container my-4 my-md-5" id="search-section" role="search" aria-label="Exercise search and filters">
+        <div class="search-filter-card p-4 bg-white rounded shadow-sm">
+            <h2 class="h5 mb-4 fw-semibold">
+                <i class="bi bi-funnel" aria-hidden="true"></i> Find Your Exercise
+            </h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="searchInput" class="form-label fw-medium">
+                        <i class="bi bi-search" aria-hidden="true"></i> Search by name
+                    </label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text" aria-hidden="true">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="search" 
+                               class="form-control" 
+                               id="searchInput" 
+                               placeholder="e.g., Push-up, Squat, Plank..." 
+                               aria-label="Search exercises by name"
+                               autocomplete="off">
+                        <button class="btn btn-outline-secondary" type="button" id="clearSearch" aria-label="Clear search">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <small class="form-text text-muted d-block mt-1">
+                        <span id="resultsCount" aria-live="polite">Start typing to search exercises</span>
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label for="categoryFilter" class="form-label fw-medium">
+                        <i class="bi bi-tag" aria-hidden="true"></i> Category
+                    </label>
+                    <select class="form-select form-select-lg" id="categoryFilter" aria-label="Filter by exercise category">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="muscleFilter" class="form-label fw-medium">
+                        <i class="bi bi-activity" aria-hidden="true"></i> Target Muscle
+                    </label>
+                    <select class="form-select form-select-lg" id="muscleFilter" aria-label="Filter by target muscle group">
+                        <option value="">All Muscles</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button class="btn btn-outline-primary me-2" id="resetFilters" type="button">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset Filters
+                    </button>
+                    <button class="btn btn-outline-secondary" id="sortButton" type="button" aria-label="Sort exercises">
+                        <i class="bi bi-sort-alpha-down"></i> Sort A-Z
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div class="container text-center my-5" id="loadingSpinner" role="status" aria-live="polite">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" aria-hidden="true">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted fw-medium">Loading exercises...</p>
+        <p class="text-muted small">Please wait while we fetch the exercise database</p>
+    </div>
+
+    <!-- Exercises Grid -->
+    <main id="main-content" class="container mb-5" role="main">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 fw-semibold mb-0">
+                <i class="bi bi-grid-3x3" aria-hidden="true"></i> Exercise Library
+            </h2>
+            <div class="view-toggle btn-group" role="group" aria-label="View options">
+                <input type="radio" class="btn-check" name="viewOptions" id="gridView" checked>
+                <label class="btn btn-outline-primary" for="gridView" aria-label="Grid view">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                </label>
+                <input type="radio" class="btn-check" name="viewOptions" id="listView">
+                <label class="btn btn-outline-primary" for="listView" aria-label="List view">
+                    <i class="bi bi-list-ul"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row" id="exercisesGrid" role="region" aria-label="Exercise results">
+            <!-- Exercises will be dynamically loaded here -->
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+        <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <span id="successMessage">Action completed successfully!</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close notification"></button>
+            </div>
+        </div>
+        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <span id="errorMessage">An error occurred. Please try again.</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close notification"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Mode Screen -->
+    <div id="workoutMode" class="workout-mode-screen" style="display: none;" aria-hidden="true">
+        <!-- Navigation (Same as homescreen) -->
+        <nav class="navbar navbar-expand-lg navbar-dark modern-navbar" role="navigation" aria-label="Workout navigation">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand brand-logo" href="#" id="workoutNavBrand" aria-label="SoundBody Home">
+                    <div class="brand-icon">
+                        <i class="bi bi-heart-pulse" aria-hidden="true"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">SoundBody</span>
+                        <span class="brand-tagline">Fitness Hub</span>
+                    </div>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#workoutNavbar" 
+                        aria-controls="workoutNavbar" aria-expanded="false" aria-label="Toggle navigation menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="workoutNavbar">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-modern" href="#" id="backToHomeLink" aria-label="Back to home">
+                                <i class="bi bi-house-fill" aria-hidden="true"></i>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-modern active" href="#" aria-current="page">
+                                <i class="bi bi-play-circle-fill" aria-hidden="true"></i>
+                                <span>Workout</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-sm btn-outline-light ms-2" id="exitWorkout" aria-label="Exit workout mode">
+                                <i class="bi bi-x-lg"></i> Exit
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container workout-container py-4">
+            <!-- Header Section (like homescreen) -->
+            <header class="container-fluid bg-light py-4 mb-4 rounded-3">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-6 fw-bold text-primary mb-2">
+                            <i class="bi bi-play-circle-fill"></i> Workout Mode
+                        </h1>
+                        <p class="lead text-muted mb-0">
+                            Voice-controlled fitness trainer with AI coach
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="voice-status voice-status-ready d-inline-flex" id="voiceStatus">
+                            <i class="bi bi-mic-fill"></i>
+                            <span>Voice Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Voice Controls Card -->
+            <div class="card mb-4 shadow-sm border-primary">
+                <div class="card-header bg-light border-bottom border-primary">
+                    <h3 class="h6 mb-0 fw-semibold text-primary">
+                        <i class="bi bi-gear-fill"></i> Speech Controls
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
+                        <button class="btn btn-success" id="toggleSpeechBtn" title="Enable/Disable speech features">
+                            <i class="bi bi-volume-up-fill"></i> <span id="speechBtnText">Speech On</span>
+                        </button>
+                        <button class="btn btn-primary" id="startMicBtn" title="Start voice recognition" style="display: none;">
+                            <i class="bi bi-mic"></i> Start Mic
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workout Queue Card -->
+            <div class="card mb-4 shadow-sm border-primary">
+                <div class="card-header bg-gradient">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <h3 class="h5 mb-0 text-white">
+                                <i class="bi bi-list-check"></i> Your Workout Queue 
+                            </h3>
+                            <span class="badge bg-warning text-dark fs-5 px-3 py-2 fw-bold border border-2 border-white shadow" id="queueCount">0</span>
+                        </div>
+                        <button class="btn btn-light fw-semibold" id="clearQueueBtn">
+                            <i class="bi bi-trash"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="workout-queue-list" id="workoutQueueList">
+                        <div class="empty-queue-message text-center py-4">
+                            <i class="bi bi-inbox display-4 text-muted"></i>
+                            <p class="mt-3 mb-1 fw-semibold">No exercises added yet</p>
+                            <small class="text-muted">Browse exercises and click "Add to Workout"</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Exercise Card -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-gradient">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-light text-dark" id="exerciseNumber">Exercise 1 of 5</span>
+                        <h2 class="h4 mb-0 text-white" id="currentExerciseName">Ready to Start</h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Exercise Image/Animation -->
+                    <div class="exercise-image-container mb-4" id="exerciseVisual">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="exercise-step-container">
+                                    <span class="exercise-step-badge">Step 1</span>
+                                    <div class="exercise-placeholder">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+                                    <img src="" alt="Exercise step 1" id="exerciseImage" class="img-fluid rounded" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="exercise-step-container">
+                                    <span class="exercise-step-badge">Step 2</span>
+                                    <div class="exercise-placeholder">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+                                    <img src="" alt="Exercise step 2" id="exerciseImage2" class="img-fluid rounded" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timer Display -->
+                    <div class="timer-display text-center mb-4" id="timerDisplay">
+                        <div class="timer-label text-muted small mb-2">TIME REMAINING</div>
+                        <div class="timer-value display-1 fw-bold text-primary" id="timerValue">00:30</div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-container mb-4">
+                        <div class="progress" style="height: 12px;">
+                            <div class="progress-bar bg-success" id="progressBar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="progress-text text-center mt-2 small text-muted" id="progressText">0% Complete</div>
+                    </div>
+
+                    <!-- Exercise Instructions -->
+                    <div class="exercise-instructions mb-4">
+                        <h3 class="h6 fw-semibold mb-3">
+                            <i class="bi bi-list-ol"></i> Instructions
+                        </h3>
+                        <ol id="instructionsList" class="instructions-list">
+                            <li>Select exercises from the exercise list</li>
+                            <li>Click "Start Workout" or say "Start workout"</li>
+                            <li>Follow the AI coach instructions</li>
+                        </ol>
+                    </div>
+
+                    <!-- Control Buttons -->
+                    <div class="workout-controls d-flex gap-2 flex-wrap">
+                        <button class="btn btn-lg btn-success flex-fill" id="startWorkoutBtn">
+                            <i class="bi bi-play-fill"></i> Start Workout
+                        </button>
+                        <button class="btn btn-lg btn-warning flex-fill" id="pauseWorkoutBtn" style="display: none;">
+                            <i class="bi bi-pause-fill"></i> Pause
+                        </button>
+                        <button class="btn btn-lg btn-info flex-fill" id="nextExerciseBtn" style="display: none;">
+                            <i class="bi bi-skip-forward-fill"></i> Next
+                        </button>
+                        <button class="btn btn-lg btn-secondary flex-fill" id="repeatInstructionsBtn">
+                            <i class="bi bi-arrow-repeat"></i> Repeat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voice Commands Card -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <button class="btn btn-link text-white text-decoration-none p-0 w-100 text-start" id="voiceHelpToggle">
+                        <i class="bi bi-question-circle"></i> Voice Commands
+                        <i class="bi bi-chevron-down float-end"></i>
+                    </button>
+                </div>
+                <div class="card-body" id="voiceCommandsList" style="display: none;">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-mic-fill text-primary"></i>
+                            <strong>"Start workout"</strong> - Begin training session
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-mic-fill text-primary"></i>
+                            <strong>"Pause"</strong> or <strong>"Stop"</strong> - Pause current exercise
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-mic-fill text-primary"></i>
+                            <strong>"Next exercise"</strong> - Skip to next movement
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-mic-fill text-primary"></i>
+                            <strong>"Repeat instructions"</strong> - Hear exercise guide again
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-mic-fill text-primary"></i>
+                            <strong>"Time remaining"</strong> - Check current timer
+                        </li>
+                        <li class="mb-0">
+                            <i class="bi bi-mic-fill text-primary"></i>
+                            <strong>"Help"</strong> - List all commands
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Workout Stats Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm stat-card time-stat">
+                        <div class="card-body">
+                            <i class="bi bi-clock display-4 text-primary"></i>
+                            <div class="stat-value display-6 fw-bold mt-2" id="totalTime">0:00</div>
+                            <div class="stat-label text-muted small">Total Time</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm stat-card exercise-stat">
+                        <div class="card-body">
+                            <i class="bi bi-check-circle display-4 text-success"></i>
+                            <div class="stat-value display-6 fw-bold mt-2" id="completedExercises">0</div>
+                            <div class="stat-label text-muted small">Completed</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm stat-card calorie-stat">
+                        <div class="card-body">
+                            <i class="bi bi-fire display-4 text-danger"></i>
+                            <div class="stat-value display-6 fw-bold mt-2" id="caloriesEstimate">0</div>
+                            <div class="stat-label text-muted small">Est. Calories</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listening Indicator -->
+            <div class="listening-indicator" id="listeningIndicator" style="display: none;">
+                <i class="bi bi-mic-fill me-2"></i>
+                <span>Listening...</span>
+                <div class="listening-wave ms-2">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Complete Modal -->
+    <div class="modal fade" id="workoutCompleteModal" tabindex="-1" aria-labelledby="workoutCompleteTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content workout-complete-content">
+                <div class="modal-header border-0">
+                    <h2 class="modal-title w-100 text-center" id="workoutCompleteTitle">
+                        <i class="bi bi-trophy-fill text-warning"></i><br>
+                        Workout Complete!
+                    </h2>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="complete-stats">
+                        <div class="complete-stat">
+                            <h3 id="finalTotalTime">0:00</h3>
+                            <p>Total Time</p>
+                        </div>
+                        <div class="complete-stat">
+                            <h3 id="finalExerciseCount">0</h3>
+                            <p>Exercises</p>
+                        </div>
+                        <div class="complete-stat">
+                            <h3 id="finalCalories">0</h3>
+                            <p>Calories</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 lead">Great job! You've completed your workout session.</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal">
+                        <i class="bi bi-house"></i> Back to Home
+                    </button>
+                    <button type="button" class="btn btn-lg btn-success" id="startNewWorkout">
+                        <i class="bi bi-arrow-repeat"></i> New Workout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Microphone Permission Modal -->
+    <div class="modal fade" id="micPermissionModal" tabindex="-1" aria-labelledby="micPermissionLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="micPermissionLabel">
+                        <i class="bi bi-mic-fill"></i> Microphone Access
+                    </h5>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <div class="mb-4">
+                        <i class="bi bi-mic-fill" style="font-size: 4rem; color: var(--primary);"></i>
+                    </div>
+                    <h5>Enable Voice Commands</h5>
+                    <p class="text-muted">
+                        SoundBody needs access to your microphone to enable voice-controlled workouts. 
+                        You'll be able to control your workout with commands like:
+                    </p>
+                    <div class="text-start mx-auto" style="max-width: 300px;">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> "Start workout"</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> "Pause"</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> "Next exercise"</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> "Repeat instructions"</li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle"></i> You can still use button controls if you decline
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary btn-lg" id="allowMicBtn">
+                        <i class="bi bi-mic-fill"></i> Allow Microphone
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="declineMicBtn">
+                        Use Buttons Only
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Commands Help Modal -->
+    <div class="modal fade" id="voiceCommandsModal" tabindex="-1" aria-labelledby="voiceCommandsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient text-white">
+                    <h5 class="modal-title" id="voiceCommandsLabel">
+                        <i class="bi bi-mic-fill"></i> Voice Commands Guide
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Say "Help" anytime during your workout to see this guide
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 text-primary">
+                        <i class="bi bi-play-circle-fill"></i> Workout Controls
+                    </h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="command-item p-3 border rounded bg-light">
+                                <i class="bi bi-mic-fill text-success"></i>
+                                <strong>"Start workout"</strong>
+                                <p class="text-muted small mb-0">Begin your training session</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="command-item p-3 border rounded bg-light">
+                                <i class="bi bi-mic-fill text-warning"></i>
+                                <strong>"Pause"</strong> or <strong>"Stop"</strong>
+                                <p class="text-muted small mb-0">Pause current exercise</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="command-item p-3 border rounded bg-light">
+                                <i class="bi bi-mic-fill text-primary"></i>
+                                <strong>"Next exercise"</strong> or <strong>"Skip"</strong>
+                                <p class="text-muted small mb-0">Move to next movement</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="command-item p-3 border rounded bg-light">
+                                <i class="bi bi-mic-fill text-info"></i>
+                                <strong>"Repeat instructions"</strong>
+                                <p class="text-muted small mb-0">Hear exercise guide again</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold mb-3 text-primary">
+                        <i class="bi bi-info-circle-fill"></i> Information Commands
+                    </h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="command-item p-3 border rounded bg-light">
+                                <i class="bi bi-mic-fill text-secondary"></i>
+                                <strong>"Time remaining"</strong>
+                                <p class="text-muted small mb-0">Check current timer</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="command-item p-3 border rounded bg-light">
+                                <i class="bi bi-mic-fill text-dark"></i>
+                                <strong>"Help"</strong>
+                                <p class="text-muted small mb-0">Show this commands list</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <i class="bi bi-check-lg"></i> Got it!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Detail Modal -->
+    <div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h2 class="modal-title h4 fw-bold" id="modalTitle">Exercise Details</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close exercise details"></button>
+                </div>
+                <div class="modal-body pt-2" id="modalBody" role="document">
+                    <!-- Exercise details will be loaded here -->
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-lg btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Close
+                    </button>
+                    <button type="button" class="btn btn-lg btn-primary" id="saveExerciseBtn" aria-label="Save this exercise to your favorites">
+                        <i class="bi bi-bookmark-plus"></i> Save Exercise
+                    </button>
+                    <button type="button" class="btn btn-lg btn-success d-none" id="unsaveExerciseBtn" aria-label="Remove this exercise from your favorites">
+                        <i class="bi bi-bookmark-check-fill"></i> Saved
+                    </button>
+                    <button type="button" class="btn btn-lg btn-warning" id="addToWorkoutBtn" aria-label="Add this exercise to workout">
+                        <i class="bi bi-plus-circle"></i> Add to Workout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="modern-footer py-3 py-md-4 mt-5" role="contentinfo">
+        <div class="container">
+            <div class="row g-3 g-md-4">
+                <div class="col-md-6">
+                    <h3 class="h6 fw-bold mb-2 footer-brand">
+                        <i class="bi bi-heart-pulse" aria-hidden="true"></i> SoundBody
+                    </h3>
+                    <p class="footer-text mb-2">Your comprehensive exercise database for a healthier lifestyle.</p>
+                    <p class="mb-0">
+                        <span class="footer-badge">
+                            <i class="bi bi-collection" aria-hidden="true"></i> 
+                            <span id="exerciseCount" aria-label="Total exercises available">0</span> Exercises Available
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h4 class="h6 fw-semibold mb-2 footer-heading">Accessibility Features</h4>
+                    <ul class="list-unstyled footer-list mb-0">
+                        <li><i class="bi bi-check-circle text-success"></i> Screen reader compatible</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Keyboard navigation</li>
+                        <li><i class="bi bi-check-circle text-success"></i> High contrast support</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Offline capable (PWA)</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider my-3">
+            <div class="text-center">
+                <p class="mb-0 footer-copyright">
+                    &copy; 2025 SoundBody. Data provided by Free Exercise DB. 
+                    <a href="#" class="footer-link">Privacy Policy</a> | 
+                    <a href="#" class="footer-link">Terms of Use</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Install PWA Button (appears when installable) -->
+    <button id="installButton" 
+            class="btn btn-primary btn-lg install-button shadow-lg" 
+            style="display: none;"
+            aria-label="Install SoundBody app on your device">
+        <i class="bi bi-download" aria-hidden="true"></i> 
+        <span class="d-none d-sm-inline">Install App</span>
+        <span class="d-inline d-sm-none">Install</span>
+    </button>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" 
+            class="btn btn-secondary btn-lg back-to-top-button shadow" 
+            style="display: none;"
+            aria-label="Back to top">
+        <i class="bi bi-arrow-up" aria-hidden="true"></i>
+    </button>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Main App Script -->
+    <script src="app.js?v=2.3"></script>
+    
+    <!-- Workout Mode Script -->
+    <script src="workout.js?v=2.5"></script>
+</body>
+</html>
