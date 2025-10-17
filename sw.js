@@ -1,4 +1,4 @@
-const CACHE_NAME = 'soundbody-v2.7';
+const CACHE_NAME = 'soundbody-v3.0';
 const urlsToCache = [
   '/',
   '/index.html',

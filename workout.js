@@ -302,10 +302,9 @@ function toggleSpeech() {
         showSuccessToast('Speech features enabled');
         speak('Speech features enabled');
         
-        // Show mic button if recognition is available
-        if (recognition) {
-            startMicBtn.style.display = 'inline-block';
-        }
+        // Don't show mic button - voice control is automatic during workout
+        // User doesn't need manual mic control
+        startMicBtn.style.display = 'none';
     } else {
         speechBtnText.textContent = 'Speech Off';
         icon.className = 'bi bi-volume-mute-fill';
