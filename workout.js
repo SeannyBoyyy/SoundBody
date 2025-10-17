@@ -44,7 +44,7 @@ const workoutLink = document.getElementById('workoutLink');
 const addToWorkoutBtn = document.getElementById('addToWorkoutBtn');
 const voiceHelpToggle = document.getElementById('voiceHelpToggle');
 const toggleSpeechBtn = document.getElementById('toggleSpeechBtn');
-const startMicBtn = document.getElementById('startMicBtn');
+const toggleMicBtn = document.getElementById('toggleMicBtn');
 const clearQueueBtn = document.getElementById('clearQueueBtn');
 
 // Stats
@@ -332,35 +332,43 @@ function toggleSpeech() {
     }
 }
 
-// Manually Start Speech Recognition
-function startSpeechRecognition() {
-    if (!speechEnabled) {
-        showErrorToast('Please enable speech features first');
-        return;
-    }
-    
+// Toggle Microphone On/Off
+function toggleMicrophone() {
     if (!recognition) {
-        showErrorToast('Speech recognition not available');
+        showErrorToast('Voice recognition not available. Check microphone permissions.');
         return;
     }
     
     if (isListening) {
-        // Stop recognition
+        // Turn microphone OFF
         recognition.stop();
-        startMicBtn.innerHTML = '<i class="bi bi-mic"></i> Start Mic';
-        startMicBtn.classList.remove('btn-danger');
-        startMicBtn.classList.add('btn-primary');
+        const micBtnText = document.getElementById('micBtnText');
+        const icon = toggleMicBtn.querySelector('i');
+        
+        micBtnText.textContent = 'Mic Off';
+        icon.className = 'bi bi-mic-mute-fill';
+        toggleMicBtn.classList.remove('btn-primary');
+        toggleMicBtn.classList.add('btn-danger');
+        
+        updateVoiceStatus('Microphone Off', 'error');
+        showSuccessToast('Microphone turned off');
     } else {
-        // Start recognition
+        // Turn microphone ON
         try {
             recognition.start();
-            startMicBtn.innerHTML = '<i class="bi bi-mic-fill"></i> Stop Mic';
-            startMicBtn.classList.remove('btn-primary');
-            startMicBtn.classList.add('btn-danger');
-            speak('Voice recognition activated');
+            const micBtnText = document.getElementById('micBtnText');
+            const icon = toggleMicBtn.querySelector('i');
+            
+            micBtnText.textContent = 'Mic On';
+            icon.className = 'bi bi-mic-fill';
+            toggleMicBtn.classList.remove('btn-danger');
+            toggleMicBtn.classList.add('btn-primary');
+            
+            updateVoiceStatus('Listening...', 'listening');
+            showSuccessToast('Microphone turned on');
         } catch (e) {
             console.error('Failed to start recognition:', e);
-            showErrorToast('Failed to start voice recognition');
+            showErrorToast('Failed to turn on microphone. Please check permissions.');
         }
     }
 }
@@ -400,11 +408,27 @@ async function enterWorkoutMode() {
     const initialized = await initSpeechRecognition();
     if (initialized) {
         updateVoiceStatus('Voice Ready', 'ready');
+        // Update mic button to show it's available
+        if (toggleMicBtn) {
+            const micBtnText = document.getElementById('micBtnText');
+            const icon = toggleMicBtn.querySelector('i');
+            micBtnText.textContent = 'Mic On';
+            icon.className = 'bi bi-mic-fill';
+            toggleMicBtn.classList.remove('btn-danger');
+            toggleMicBtn.classList.add('btn-primary');
+            toggleMicBtn.disabled = false;
+        }
         // Speak welcome message only if speech is available
         speak('Welcome to your workout session. Add exercises and say start workout when ready.', { motivation: true });
     } else {
         updateVoiceStatus('Voice not available', 'error');
         showErrorToast('Voice commands are not available. You can still use button controls.');
+        // Disable mic button if not available
+        if (toggleMicBtn) {
+            toggleMicBtn.disabled = true;
+            const micBtnText = document.getElementById('micBtnText');
+            micBtnText.textContent = 'Mic Unavailable';
+        }
     }
     
     // Load workout exercises
@@ -852,8 +876,8 @@ function showWorkoutCompleteModal() {
     
     const minutes = Math.floor(totalWorkoutTime / 60);
     const seconds = totalWorkoutTime % 60;
-    document.getElementById('finalTotalTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    document.getElementById('finalExerciseCount').textContent = completedExercisesCount;
+    document.getElementById('finalTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    document.getElementById('finalExercises').textContent = completedExercisesCount;
     document.getElementById('finalCalories').textContent = Math.round((totalWorkoutTime / 60) * 5);
     
     modal.show();
@@ -981,9 +1005,9 @@ if (toggleSpeechBtn) {
     toggleSpeechBtn.addEventListener('click', toggleSpeech);
 }
 
-// Start Mic Button
-if (startMicBtn) {
-    startMicBtn.addEventListener('click', startSpeechRecognition);
+// Toggle Microphone Button
+if (toggleMicBtn) {
+    toggleMicBtn.addEventListener('click', toggleMicrophone);
 }
 
 // Clear Queue Button
